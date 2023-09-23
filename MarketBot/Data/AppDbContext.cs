@@ -18,7 +18,6 @@ namespace ProductManagerBot.Data
 
         public AppDbContext()
         {
-            Database.EnsureDeleted();
             Database.EnsureCreated();
         }
 
