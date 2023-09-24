@@ -13,5 +13,7 @@ namespace ProductManagerBot.Data.Entities
         [Required]
         [MaxLength(15)]
         public string? Name { get; set; }
+
+        public List<Product> Products { get; set; } = new();
     }
 }

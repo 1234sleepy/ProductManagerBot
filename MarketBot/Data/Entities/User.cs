@@ -19,5 +19,6 @@ namespace ProductManagerBot.Data.Entities
         public string? Email { get; set; }
 
         public List<Product> Products { get; set; } = new();
+        public List<FavoriteProduct> FavoriteProducts { get; set; } = new();
     }
 }
