@@ -1,10 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProductManagerBot.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ProductManagerBot.Data
 {
@@ -18,7 +13,7 @@ namespace ProductManagerBot.Data
 
         public AppDbContext()
         {
-            Database.EnsureCreated();
+            Task.Run(async () => await Database.EnsureCreatedAsync());
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

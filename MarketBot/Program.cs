@@ -1,6 +1,4 @@
 ﻿using _RegisterBot;
-using Microsoft.EntityFrameworkCore;
-using ProductManagerBot.Data.Entities;
 
 string token = "";
 

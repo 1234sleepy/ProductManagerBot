@@ -17,5 +17,7 @@ namespace ProductManagerBot.Data.Entities
         public string? Phone { get; set; }
         [MaxLength(25)]
         public string? Email { get; set; }
+
+        public List<Product> Products { get; set; } = new();
     }
 }
