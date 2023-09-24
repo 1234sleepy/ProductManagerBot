@@ -25,6 +25,9 @@ namespace ProductManagerBot.Data.Entities
         public int UserId { get; set; }
         public int CategoryId { get; set; }
 
+
         public Manufacture? Manufacture { get; set; }
+        public Category? Category { get; set; }
+        public List<User> Users { get; set; } = new();
     }
 }
