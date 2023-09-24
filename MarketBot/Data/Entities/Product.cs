@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Telegram.Bot.Types;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
@@ -28,6 +29,6 @@ namespace ProductManagerBot.Data.Entities
 
         public Manufacture? Manufacture { get; set; }
         public Category? Category { get; set; }
-        public List<User> Users { get; set; } = new();
+        public User? User { get; set; }
     }
 }
