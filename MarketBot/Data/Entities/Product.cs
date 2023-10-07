@@ -18,7 +18,7 @@ namespace ProductManagerBot.Data.Entities
         public DateTime DateOfManufacture  { get; set; }
         public DateTime DateOfUse { get; set; }
         public string? ProductContent { get; set; }
-        public int? ManufacturerId { get; set; }
+        public int? ManufactureId { get; set; }
         [Required]
         [MaxLength(25)]
         public string? Name { get; set; }

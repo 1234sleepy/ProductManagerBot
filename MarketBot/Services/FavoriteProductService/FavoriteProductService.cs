@@ -43,7 +43,7 @@ namespace ProductManagerBot.Services.FavoriteProductService
         {
             var user = await _appDbContext.Users.Include(x => x.FavoriteProducts)
                                                 .FirstOrDefaultAsync(x => x.Id == id);
-            return (IQueryable<FavoriteProduct>)user!.FavoriteProducts;
+            return user!.FavoriteProducts.AsQueryable();
         }
 
         public async Task<FavoriteProduct?> GetById(int id)

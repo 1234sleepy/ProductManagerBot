@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProductManagerBot.Data.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,8 +9,10 @@ namespace ProductManagerBot.Services.UserService
 {
     internal interface IUserService
     {
-        void Add(int userid, int productid);
-        void Update(int id, int userid, int productid);
+        void Add(int id, string name, string username, string phone, string email);
+        void Update(int id, string name, string username, string phone, string email);
         void Delete(int id);
+        Task<User?> GetById(int id);
+        Task<IQueryable<User>> GetAllByUserId(int id);
     }
 }

@@ -16,26 +16,30 @@ namespace ProductManagerBot.Services.UserService
         {
             _appDbContext = appDbContext;
         }
-        /*public async void Add(int userid, int productid)
+        public async void Add(int id, string name, string username, string phone, string email)
         {
-            await _appDbContext.FavoriteProducts.AddAsync(new FavoriteProduct() { UserId = userid, ProductId = productid });
+            await _appDbContext.Users.AddAsync(new User() {Id = id, Name = name, Username = username, Phone = phone, Email = email});
             await _appDbContext.SaveChangesAsync();
         }
-        */
+        
 
         public async void Delete(int id)
         {
             _appDbContext.Users.Remove(new User() { Id = id });
             await _appDbContext.SaveChangesAsync();
         }
-        /*
-        public async void Update(int id, int userid, int productid)
+        
+        public async void Update(int id, string name, string username, string phone, string email)
         {
-            _appDbContext.Entry(new FavoriteProduct { Id = id, UserId = userid, ProductId = productid })
+            _appDbContext.Entry(new User { Id = id, Name = name, Username = username, Phone = phone, Email = email })
                          .State = EntityState.Modified;
             await _appDbContext.SaveChangesAsync();
-
         }
-        */
+        public IQueryable<User> GetAll() => _appDbContext.Users;
+
+        public async Task<User?> GetById(int id)
+            => await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
+
+
     }
 }
