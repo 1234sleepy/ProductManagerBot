@@ -1,18 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProductManagerBot.Data.Entities;
 using ProductManagerBot.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace ProductManagerBot.Services.ProductService
 {
     internal class ProductService : IProductService
     {
         private readonly AppDbContext _appDbContext;
-        public ProductService(AppDbContext appDbContext)
+
+    public ProductService(AppDbContext appDbContext)
         {
             _appDbContext = appDbContext;
         }

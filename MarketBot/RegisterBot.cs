@@ -5,6 +5,8 @@ using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.Extensions.Hosting;
+
 
 namespace _RegisterBot
 {
