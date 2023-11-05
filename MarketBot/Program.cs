@@ -5,6 +5,7 @@ using ProductManagerBot.Services.CategoryService;
 using ProductManagerBot.Services.FavoriteProductService;
 using ProductManagerBot.Services.ManufactureService;
 using ProductManagerBot.Services.ProductService;
+using ProductManagerBot.Services.TokenService;
 using ProductManagerBot.Services.UserService;
 
 string token = "";
@@ -17,6 +18,7 @@ services.AddTransient<ICategoryService, CategoryService>();
 services.AddTransient<IFavoriteProductService, FavoriteProductService>();
 services.AddTransient<IManufactureService, ManufactureService>();
 services.AddTransient<IUserService, UserService>();
+services.AddTransient<ITokenService, TokenService>();
 
 using var provider = services.BuildServiceProvider();
 
