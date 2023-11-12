@@ -8,8 +8,6 @@ using ProductManagerBot.Services.ProductService;
 using ProductManagerBot.Services.TokenService;
 using ProductManagerBot.Services.UserService;
 
-string token = "";
-
 var services = new ServiceCollection();
 
 services.AddDbContext<AppDbContext>();
@@ -18,11 +16,11 @@ services.AddTransient<ICategoryService, CategoryService>();
 services.AddTransient<IFavoriteProductService, FavoriteProductService>();
 services.AddTransient<IManufactureService, ManufactureService>();
 services.AddTransient<IUserService, UserService>();
-services.AddTransient<ITokenService, TokenService>();
+services.AddSingleton<ITokenService, TokenService>();
 
 using var provider = services.BuildServiceProvider();
 
-RegisterBot bot = new RegisterBot(token);
+RegisterBot bot = new RegisterBot(provider.GetService<ITokenService>());
 
 bot.Start();
 bot.GetStatus();

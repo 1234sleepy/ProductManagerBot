@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.Sqlite;
 using ProductManagerBot.Data.Entities;
+using ProductManagerBot.Services.TokenService;
 using System.Xml.Linq;
 using Telegram.Bot;
 using Telegram.Bot.Types;
@@ -11,10 +12,16 @@ namespace _RegisterBot
     internal class RegisterBot
     {
         private TelegramBotClient client;
+        private ITokenService? tokenService;
 
         public RegisterBot(string token)
         {
             client = new TelegramBotClient(token);
+        }
+
+        public RegisterBot(ITokenService? tokenService)
+        {
+            this.tokenService = tokenService;
         }
 
         #region -- Public Methods --
@@ -52,42 +59,7 @@ namespace _RegisterBot
 
         private async void TextMessageHandler(Update update)
         {
-            var textToLower = update.Message.Text.ToLower();
-            var user = update.Message.From;
-            if (!isUserRegister())
-            {
-                string connectionString = "Data Source=mydb.db";
-                using (var connection = new SqliteConnection(connectionString))
-                {
-                    connection.Open();
 
-                    string sqlInsert = "INSERT INTO Users (Name, Age,isAdmin,Password) " +
-                                       "VALUES (@name, @age, @isadmin, @password)";
-                    var insertCom = new SqliteCommand(sqlInsert, connection);
-                    insertCom.Parameters.Add(new SqliteParameter("@name", name));
-                    insertCom.Parameters.Add(new SqliteParameter("@age", age));
-                    insertCom.Parameters.Add(new SqliteParameter("@isadmin", isAdmin));
-                    insertCom.Parameters.Add(new SqliteParameter("@password", password));
-                    insertCom.ExecuteNonQuery();
-                }
-            }
-            if (new string[] { "hello", "hi", "/start" }.Contains(textToLower))
-            {
-
-                await client.SendTextMessageAsync(chatId: user.Id, text: $"Hi {user.FirstName}.");
-            }
-            else if ("/getusers".Contains(textToLower) && isUserAdmin())
-            {
-                await client.SendTextMessageAsync(chatId: user.Id, text: $"Hi {user.FirstName}.");
-            }
-        }
-        private bool isUserRegister()
-        {
-            return false;
-        }
-        private bool isUserAdmin()
-        {
-            return false;
         }
         #endregion
     }
