@@ -8,5 +8,6 @@ namespace ProductManagerBot.Services.AdminCheckService
 {
     internal interface IAdminCheckService
     {
+        bool Check(long userid);
     }
 }

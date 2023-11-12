@@ -52,23 +52,7 @@ namespace _RegisterBot
 
         private async void TextMessageHandler(Update update)
         {
-            var textToLower = update.Message.Text.ToLower();
-            var user = update.Message.From;
-            if (!isRegister())
-            {
-                string connectionString = "Data Source=mydb.db";
-                using (var connection = new SqliteConnection(connectionString))
-                
-            }
-            if (new string[] { "hello", "hi", "/start" }.Contains(textToLower))
-            {
-
-                await client.SendTextMessageAsync(chatId: user.Id, text: $"Hi {user.FirstName}.");
-            }
-            else if ("/getusers".Contains(textToLower) && isUserAdmin())
-            {
-                await client.SendTextMessageAsync(chatId: user.Id, text: $"Hi {user.FirstName}.");
-            }
+       
         }
 
         #endregion
