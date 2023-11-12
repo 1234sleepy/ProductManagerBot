@@ -12,16 +12,10 @@ namespace _RegisterBot
     internal class RegisterBot
     {
         private TelegramBotClient client;
-        private ITokenService? tokenService;
 
-        public RegisterBot(string token)
+        public RegisterBot(ITokenService token)
         {
-            client = new TelegramBotClient(token);
-        }
-
-        public RegisterBot(ITokenService? tokenService)
-        {
-            this.tokenService = tokenService;
+            client = new TelegramBotClient(token.Token);
         }
 
         #region -- Public Methods --

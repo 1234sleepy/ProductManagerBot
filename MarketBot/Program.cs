@@ -17,10 +17,13 @@ services.AddTransient<IFavoriteProductService, FavoriteProductService>();
 services.AddTransient<IManufactureService, ManufactureService>();
 services.AddTransient<IUserService, UserService>();
 services.AddSingleton<ITokenService, TokenService>();
+services.AddSingleton<RegisterBot, RegisterBot>();
 
-using var provider = services.BuildServiceProvider();
 
-RegisterBot bot = new RegisterBot(provider.GetService<ITokenService>());
+using var provider = services.BuildServiceProvider(); //provider.GetService<ITokenService>();
+
+RegisterBot bot = provider.GetService<RegisterBot>();
+
 
 bot.Start();
 bot.GetStatus();
