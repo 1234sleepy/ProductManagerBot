@@ -21,8 +21,10 @@ namespace ProductManagerBot.Services.UserService
             await _appDbContext.Users.AddAsync(new User() {Id = id, Name = name, Username = username, Phone = phone, Email = email});
             await _appDbContext.SaveChangesAsync();
         }
-        
-
+        public async void IsRegister(int id)
+        {
+            
+        }
         public async void Delete(int id)
         {
             _appDbContext.Users.Remove(new User() { Id = id });
