@@ -13,11 +13,12 @@ namespace _RegisterBot
     internal class RegisterBot
     {
         private TelegramBotClient client;
-
-        public RegisterBot(ITokenService token)
+        private readonly IAdminCheckService _adminCheck;
+        public RegisterBot(ITokenService token,
+                           IAdminCheckService adminCheck)
         {
             client = new TelegramBotClient(token.Token);
-
+            _adminCheck = adminCheck;
         }
 
         #region -- Public Methods --
@@ -55,9 +56,10 @@ namespace _RegisterBot
 
         private async void TextMessageHandler(Update update)
         {
-           /* if (provider.GetService<AdminCheckService>().Check(update.Message.From)) { 
-            
-            }*/
+            if (_adminCheck.Check(update.Message.From.Id))
+            {
+
+            }
         }
         #endregion
     }
