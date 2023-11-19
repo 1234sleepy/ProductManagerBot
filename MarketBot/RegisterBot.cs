@@ -56,6 +56,10 @@ namespace _RegisterBot
 
         private async void TextMessageHandler(Update update)
         {
+            if(update.Message.Text == "/start")
+            {
+
+            }
             if (_adminCheck.Check(update.Message.From.Id))
             {
 
