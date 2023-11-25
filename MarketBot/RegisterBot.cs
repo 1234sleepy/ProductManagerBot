@@ -2,11 +2,14 @@
 using ProductManagerBot.Data.Entities;
 using ProductManagerBot.Services.AdminCheckService;
 using ProductManagerBot.Services.TokenService;
+using ProductManagerBot.Services.UserService;
+using System.Numerics;
 using System.Xml.Linq;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.InlineQueryResults;
+using Telegram.Bot.Types.ReplyMarkups;
 
 namespace _RegisterBot
 {
@@ -14,11 +17,13 @@ namespace _RegisterBot
     {
         private TelegramBotClient client;
         private readonly IAdminCheckService _adminCheck;
-        public RegisterBot(ITokenService token,
-                           IAdminCheckService adminCheck)
+        private readonly IUserService user;
+
+        public RegisterBot(ITokenService token, IAdminCheckService admincheck, IUserService user)
         {
             client = new TelegramBotClient(token.Token);
-            _adminCheck = adminCheck;
+            _adminCheck = admincheck;
+            this.user = user;
         }
 
         #region -- Public Methods --
@@ -50,20 +55,30 @@ namespace _RegisterBot
             {
                 TextMessageHandler(update);
             }
-            Console.WriteLine(update?.CallbackQuery?.Data);
-
         }
 
         private async void TextMessageHandler(Update update)
         {
-            if(update.Message.Text == "/start")
-            {
+            int id = (int)update.Message.From.Id;
+            string name = update.Message.From.FirstName + " " + update.Message.From.LastName;
+            string username = update.Message.From.Username;
+            string phone = "";
+            string email = "";
 
+            if (update.Message.Text == "/start") {
+                await client.SendTextMessageAsync(chatId: id, $"Hello {username}. Can you wait a second please. We create account for you.");
+                user.Add(id, name, username,phone, email);
+                await client.SendTextMessageAsync(chatId: id, $"You register is successful");
+            }else {
+                await client.SendTextMessageAsync(chatId: id,
+                text: $"Hello {username} you successful log in");
             }
-            if (_adminCheck.Check(update.Message.From.Id))
-            {
 
+            if (update.Message.Text == "/getUsers" && _adminCheck.Check(update.Message.From.Id))
+            {
+                user.GetAll();
             }
+
         }
         #endregion
     }

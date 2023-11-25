@@ -11,7 +11,7 @@ namespace ProductManagerBot.Services.UserService
     {
         void Add(int id, string name, string username, string phone, string email);
         void Update(int id, string name, string username, string phone, string email);
-        void Delete(int id);
         Task<User?> GetById(int id);
+        IQueryable<User> GetAll();
     }
 }
