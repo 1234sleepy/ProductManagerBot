@@ -16,9 +16,9 @@ namespace ProductManagerBot.Services.UserService
         {
             _appDbContext = appDbContext;
         }
-        public async void Add(int id, string name, string username, string phone, string email)
+        public async void Add(User user)
         {
-            await _appDbContext.Users.AddAsync(new User() {Id = id, Name = name, Username = username, Phone = phone, Email = email});
+            await _appDbContext.Users.AddAsync(user);
             await _appDbContext.SaveChangesAsync();
         }
         public async void Delete(int id)
@@ -27,9 +27,9 @@ namespace ProductManagerBot.Services.UserService
             await _appDbContext.SaveChangesAsync();
         }
         
-        public async void Update(int id, string name, string username, string phone, string email)
+        public async void Update(User user)
         {
-            _appDbContext.Entry(new User { Id = id, Name = name, Username = username, Phone = phone, Email = email })
+            _appDbContext.Entry(user)
                          .State = EntityState.Modified;
             await _appDbContext.SaveChangesAsync();
         }

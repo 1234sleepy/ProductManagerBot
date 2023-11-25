@@ -11,6 +11,8 @@ namespace ProductManagerBot.Data.Entities
     {
         public int Id { get; set; }
         [Required]
+        public long TgId { get; set; }
+        [Required]
         public string? Name { get; set; }
         public string? Username { get; set; }
         [MaxLength(15)]

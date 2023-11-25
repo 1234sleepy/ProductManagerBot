@@ -24,10 +24,10 @@ services.AddSingleton<RegisterBot, RegisterBot>();
 
 using var provider = services.BuildServiceProvider(); //provider.GetService<ITokenService>();
 
-RegisterBot bot = provider.GetService<RegisterBot>();
+var bot = provider.GetService<RegisterBot>();
 
 
-bot.Start();
-bot.GetStatus();
+bot?.Start();
+bot?.GetStatus();
 Console.ReadLine();
 

@@ -1,15 +1,11 @@
-﻿using Microsoft.Data.Sqlite;
-using ProductManagerBot.Data.Entities;
-using ProductManagerBot.Services.AdminCheckService;
+﻿using ProductManagerBot.Services.AdminCheckService;
 using ProductManagerBot.Services.TokenService;
 using ProductManagerBot.Services.UserService;
-using System.Numerics;
-using System.Xml.Linq;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
-using Telegram.Bot.Types.InlineQueryResults;
-using Telegram.Bot.Types.ReplyMarkups;
+using ProductManagerBot.Extensions;
+
 
 namespace _RegisterBot
 {
@@ -17,13 +13,13 @@ namespace _RegisterBot
     {
         private TelegramBotClient client;
         private readonly IAdminCheckService _adminCheck;
-        private readonly IUserService user;
+        private readonly IUserService _userService;
 
         public RegisterBot(ITokenService token, IAdminCheckService admincheck, IUserService user)
         {
             client = new TelegramBotClient(token.Token);
             _adminCheck = admincheck;
-            this.user = user;
+            _userService = user;
         }
 
         #region -- Public Methods --
@@ -51,32 +47,33 @@ namespace _RegisterBot
         {
             var type = update.Message?.Type ?? MessageType.Unknown;
 
-            if(type == MessageType.Text)
+            if (type == MessageType.Text)
             {
-                TextMessageHandler(update);
+                await TextMessageHandler(update);
             }
         }
 
-        private async void TextMessageHandler(Update update)
+        private async Task TextMessageHandler(Update update)
         {
-            int id = (int)update.Message.From.Id;
-            string name = update.Message.From.FirstName + " " + update.Message.From.LastName;
-            string username = update.Message.From.Username;
-            string phone = "";
-            string email = "";
+            var tgUser = update!.Message!.From;
+            int id = (int)update!.Message!.From!.Id;
 
-            if (update.Message.Text == "/start") {
-                await client.SendTextMessageAsync(chatId: id, $"Hello {username}. Can you wait a second please. We create account for you.");
-                user.Add(id, name, username,phone, email);
+            update.Message.From.ToUser();
+            if (update.Message.Text == "/start")
+            {
+                await client.SendTextMessageAsync(chatId: id, $"Hello {tgUser!.Username}. Can you wait a second please. We create account for you.");
+                _userService.Add(tgUser.ToUser());
                 await client.SendTextMessageAsync(chatId: id, $"You register is successful");
-            }else {
+            }
+            else
+            {
                 await client.SendTextMessageAsync(chatId: id,
-                text: $"Hello {username} you successful log in");
+                text: $"Hello {tgUser!.Username} you successful log in");
             }
 
             if (update.Message.Text == "/getUsers" && _adminCheck.Check(update.Message.From.Id))
             {
-                user.GetAll();
+                _userService.GetAll();
             }
 
         }
