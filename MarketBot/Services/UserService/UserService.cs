@@ -18,8 +18,13 @@ namespace ProductManagerBot.Services.UserService
         }
         public async void Add(User user)
         {
+            if (await _appDbContext.Users.AnyAsync(x => x.Id == user.Id)) {
+
+                return;
+            }
             await _appDbContext.Users.AddAsync(user);
             await _appDbContext.SaveChangesAsync();
+
         }
         public async void Delete(int id)
         {

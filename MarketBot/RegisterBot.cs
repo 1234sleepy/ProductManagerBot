@@ -60,7 +60,7 @@ namespace _RegisterBot
             var tgUser = update!.Message!.From;
             int id = (int)update!.Message!.From!.Id;
 
-            if (update.Message.Text == "/start")
+            if (update.Message.Text == "/start" && )
             {
                 await client.SendTextMessageAsync(chatId: id, $"Hello {tgUser!.Username}. Can you wait a second please. We create account for you.");
                 _userService.Add(tgUser.ToUser());
