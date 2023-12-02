@@ -23,12 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Services\ProductSearchService\Enum\" />
-    <Folder Include="Services\ProductSearchService\Interface\" />
-    <Folder Include="Services\ProductSearchService\Instances\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="app_config.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

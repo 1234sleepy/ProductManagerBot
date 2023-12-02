@@ -3,5 +3,6 @@
   "admins": [
     1728238356,
     1050318011
-  ]
+  ],
+  "ConnectionString": "Data Source=medb.db"
 }

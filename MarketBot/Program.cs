@@ -1,4 +1,5 @@
 ﻿using _RegisterBot;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using ProductManagerBot.Data;
 using ProductManagerBot.Services.AdminCheckService;
@@ -11,7 +12,10 @@ using ProductManagerBot.Services.UserService;
 
 var services = new ServiceCollection();
 
-services.AddDbContext<AppDbContext>();
+services.AddDbContext<AppDbContext>(opt =>
+{
+    opt.UseSqlite("Data Source=medb.db");
+});
 services.AddTransient<IProductService, ProductService>();
 services.AddTransient<ICategoryService, CategoryService>();
 services.AddTransient<IFavoriteProductService, FavoriteProductService>();

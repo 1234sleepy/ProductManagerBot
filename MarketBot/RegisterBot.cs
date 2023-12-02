@@ -60,7 +60,6 @@ namespace _RegisterBot
             var tgUser = update!.Message!.From;
             int id = (int)update!.Message!.From!.Id;
 
-            update.Message.From.ToUser();
             if (update.Message.Text == "/start")
             {
                 await client.SendTextMessageAsync(chatId: id, $"Hello {tgUser!.Username}. Can you wait a second please. We create account for you.");
@@ -75,7 +74,7 @@ namespace _RegisterBot
 
             if (update.Message.Text == "/getUsers" && _adminCheck.Check(update.Message.From.Id))
             {
-                _userService.GetAll();
+                await client.SendTextMessageAsync(id, string.Join("\n",_userService.GetAll().Select(x=>x.Name)));
             }
 
         }
