@@ -15,7 +15,7 @@ namespace ProductManagerBot.Services.TokenService
             string json = File.ReadAllText(Constants.APP_CONFIG);
             var config = JsonConvert.DeserializeObject<AppConfig>(json);
 
-            Token = config.TelegramToken;
+            Token = config!.TelegramToken;
         }
         public string Token { get; }
     }

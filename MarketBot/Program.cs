@@ -19,7 +19,7 @@ services.AddTransient<IManufactureService, ManufactureService>();
 services.AddTransient<IAdminCheckService, AdminCheckService>();
 services.AddTransient<IUserService, UserService>();
 services.AddSingleton<ITokenService, TokenService>();
-services.AddSingleton<RegisterBot, RegisterBot>();
+services.AddSingleton<RegisterBot>();
 
 
 using var provider = services.BuildServiceProvider(); //provider.GetService<ITokenService>();

@@ -15,7 +15,9 @@ namespace _RegisterBot
         private readonly IAdminCheckService _adminCheck;
         private readonly IUserService _userService;
 
-        public RegisterBot(ITokenService token, IAdminCheckService admincheck, IUserService user)
+        public RegisterBot(ITokenService token, 
+                           IAdminCheckService admincheck, 
+                           IUserService user)
         {
             client = new TelegramBotClient(token.Token);
             _adminCheck = admincheck;
