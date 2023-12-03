@@ -5,7 +5,8 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using ProductManagerBot.Extensions;
-
+using Telegram.Bot.Types.ReplyMarkups;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
 namespace _RegisterBot
 {
@@ -48,6 +49,14 @@ namespace _RegisterBot
         private async Task UpdateHandler(ITelegramBotClient bot, Update update, CancellationToken ct)
         {
             var type = update.Message?.Type ?? MessageType.Unknown;
+            
+            if (update.Type == UpdateType.CallbackQuery)
+            {
+                await bot.AnswerCallbackQueryAsync(update.CallbackQuery.Id,
+                    "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",);
+                Console.WriteLine(update.CallbackQuery.Data);
+            }
+
 
             if (type == MessageType.Text)
             {
@@ -60,7 +69,8 @@ namespace _RegisterBot
             var tgUser = update!.Message!.From;
             int id = (int)update!.Message!.From!.Id;
 
-            if (update.Message.Text == "/start" && )
+
+            if (update.Message.Text == "/start")
             {
                 await client.SendTextMessageAsync(chatId: id, $"Hello {tgUser!.Username}. Can you wait a second please. We create account for you.");
                 _userService.Add(tgUser.ToUser());
@@ -74,7 +84,16 @@ namespace _RegisterBot
 
             if (update.Message.Text == "/getUsers" && _adminCheck.Check(update.Message.From.Id))
             {
-                await client.SendTextMessageAsync(id, string.Join("\n",_userService.GetAll().Select(x=>x.Name)));
+
+                InlineKeyboardMarkup m = new(new[]
+                {
+                    InlineKeyboardButton.WithCallbackData("Click me!", "Some DATA"),
+                    
+                });
+                await client.SendTextMessageAsync(id, string.Join("\n",_userService.GetAll().Select(x=>x.Name)),
+                    replyMarkup: m
+
+                    );
             }
 
         }
