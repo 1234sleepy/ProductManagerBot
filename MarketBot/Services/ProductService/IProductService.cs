@@ -9,9 +9,11 @@ namespace ProductManagerBot.Services.ProductService
 {
     internal interface IProductService 
     {
-        void Add(int id, string barcode, double weight, double calories, DateTime dateofmanufacture, DateTime dateofuse, string productcontent, int manufactureid, string name, int userid, int categoryid, Manufacture manufacture);
 
-        void Update(int id, string barcode, double weight, double calories, DateTime dateofmanufacture, DateTime dateofuse, string productcontent, int manufactureid, string name, int userid, int categoryid, Manufacture manufacture);
+       
+        void Add(Product p);
+
+        void Update(Product p);
         void Delete(int id);
         Task<Product?> GetById(int id);
         IQueryable<Product> GetAll();

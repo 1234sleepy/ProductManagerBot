@@ -12,9 +12,9 @@ namespace ProductManagerBot.Services.ProductService
             _appDbContext = appDbContext;
         }
         
-        public async void Add(int id, string barcode, double weight, double calories, DateTime dateofmanufacture, DateTime dateofuse, string productcontent, int manufactureid, string name, int userid, int categoryid, Manufacture manufacture)
+        public async void Add(Product p)
         {
-            await _appDbContext.Products.AddAsync(new Product() { Id = id, Barcode = barcode, Weight = weight, Calories = calories, DateOfManufacture = dateofmanufacture, DateOfUse = dateofuse, ProductContent = productcontent, ManufactureId = manufactureid, Name = name, UserId = userid, CategoryId = categoryid, Manufacture = manufacture });
+            await _appDbContext.Products.AddAsync(p);
             await _appDbContext.SaveChangesAsync();
         }
         
@@ -25,9 +25,9 @@ namespace ProductManagerBot.Services.ProductService
             await _appDbContext.SaveChangesAsync();
         }
 
-        public async void Update(int id, string barcode, double weight, double calories, DateTime dateofmanufacture, DateTime dateofuse, string productcontent, int manufactureid, string name, int userid, int categoryid, Manufacture manufacture)
+        public async void Update(Product p)
         {
-            _appDbContext.Entry(new Product { Id = id, Barcode = barcode, Weight = weight, Calories = calories, DateOfManufacture = dateofmanufacture, DateOfUse = dateofuse, ProductContent = productcontent, ManufactureId = manufactureid, Name = name, UserId = userid, CategoryId = categoryid, Manufacture = manufacture })
+            _appDbContext.Entry(p)
                          .State = EntityState.Modified;
             await _appDbContext.SaveChangesAsync();
         }
