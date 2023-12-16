@@ -23,8 +23,8 @@ services.AddTransient<IFavoriteProductService, FavoriteProductService>();
 services.AddTransient<IManufactureService, ManufactureService>();
 services.AddTransient<IAdminCheckService, AdminCheckService>();
 services.AddTransient<IUserService, UserService>();
-services.AddSingleton<IAPITokenService, APITokenService>();
-services.AddSingleton<ITokenService,APITokenService>();
+services.AddSingleton<IAPITokenService, SearchupcService>();
+services.AddSingleton<ITokenService,TokenService>();
 services.AddSingleton<RegisterBot>();
 
 

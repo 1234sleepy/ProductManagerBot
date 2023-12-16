@@ -9,9 +9,9 @@ using ProductManagerBot.Helpers;
 
 namespace ProductManagerBot.Services.TokenService
 {
-    internal class APITokenService : ITokenService
+    internal class TokenService : ITokenService
     {
-        public APITokenService() {
+        public TokenService() {
             string json = File.ReadAllText(Constants.APP_CONFIG);
             var config = JsonConvert.DeserializeObject<AppConfig>(json);
 
