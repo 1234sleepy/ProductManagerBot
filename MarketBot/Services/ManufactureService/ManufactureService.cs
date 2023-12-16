@@ -29,15 +29,14 @@ namespace ProductManagerBot.Services.ManufactureService
 
         public async Task<IQueryable<Manufacture>> GetAllByUserId(int id)
         {
-            //var user = await _appDbContext.Users.Include(x => x.Products)
-            //                                        .ThenInclude(y => y.Manufacture)
-            //                                    .FirstOrDefaultAsync(x => x.Id == id);
-            return null;
-            //return user?.Products.Select(x => x!.Manufacture ?? new Manufacture())
-            //                     .Distinct()
-            //                     .AsQueryable()
-            //                     ??
-            //                     Enumerable.Empty<Manufacture>().AsQueryable();
+            var user = await _appDbContext.Users.Include(x => x.Products)
+                                                    .ThenInclude(y => y.Manufacture)
+                                                .FirstOrDefaultAsync(x => x.Id == id);
+            return user?.Products.Select(x => x!.Manufacture ?? new Manufacture())
+                                 .Distinct()
+                                 .AsQueryable()
+                                 ??
+                                 Enumerable.Empty<Manufacture>().AsQueryable();
         }
 
         public async Task<Manufacture?> GetById(int id)

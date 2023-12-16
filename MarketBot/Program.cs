@@ -14,7 +14,7 @@ var services = new ServiceCollection();
 
 services.AddDbContext<AppDbContext>(opt =>
 {
-    opt.UseSqlite("Data Source=medb.db");
+    opt.UseSqlite("Data Source=../../../medb.db");
 });
 services.AddTransient<IProductService, ProductService>();
 services.AddTransient<ICategoryService, CategoryService>();

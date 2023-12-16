@@ -53,7 +53,7 @@ namespace _RegisterBot
             if (update.Type == UpdateType.CallbackQuery)
             {
                 await bot.AnswerCallbackQueryAsync(update.CallbackQuery.Id,
-                    "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",);
+                    "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                 Console.WriteLine(update.CallbackQuery.Data);
             }
 
