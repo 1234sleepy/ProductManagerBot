@@ -9,6 +9,7 @@ namespace ProductManagerBot.Helpers
     internal class AppConfig
     {
         public string? TelegramToken { get; set; }
+        public string? ApiToken { get; set; }
         public long[]? Admins { get; set; }
         public string? ConnectionString { get; set; }
     }

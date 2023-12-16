@@ -7,6 +7,8 @@ using Telegram.Bot.Types.Enums;
 using ProductManagerBot.Extensions;
 using Telegram.Bot.Types.ReplyMarkups;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace _RegisterBot
 {
@@ -16,7 +18,9 @@ namespace _RegisterBot
         private readonly IAdminCheckService _adminCheck;
         private readonly IUserService _userService;
 
-        public RegisterBot(ITokenService token, 
+        static HttpClient httpClient = new HttpClient();
+
+        public RegisterBot(IAPITokenService token, 
                            IAdminCheckService admincheck, 
                            IUserService user)
         {
@@ -93,6 +97,13 @@ namespace _RegisterBot
                 var gmenu = new InlineKeyboardMarkup(us);
                 await client.SendTextMessageAsync(id,"Users",
                     replyMarkup: gmenu);
+            }
+            if (update.Message.Text == "/getFood")
+            {
+                HttpResponseMessage response = await httpClient.GetAsync($"http://www.searchupc.com/handlers/upcsearch.ashx?request_type=3&access_token=F57BCA88-B4E4-40C2-97F7-10FDBD5EB247&upc=upc_code ");
+                response.EnsureSuccessStatusCode();
+                string responseBody = await response.Content.ReadAsStringAsync();
+                Console.WriteLine(responseBody);
             }
 
         }

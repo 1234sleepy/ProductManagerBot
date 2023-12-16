@@ -8,6 +8,7 @@ using ProductManagerBot.Services.FavoriteProductService;
 using ProductManagerBot.Services.ManufactureService;
 using ProductManagerBot.Services.ProductService;
 using ProductManagerBot.Services.TokenService;
+using ProductManagerBot.Services.APITokenService;
 using ProductManagerBot.Services.UserService;
 
 var services = new ServiceCollection();
@@ -22,7 +23,8 @@ services.AddTransient<IFavoriteProductService, FavoriteProductService>();
 services.AddTransient<IManufactureService, ManufactureService>();
 services.AddTransient<IAdminCheckService, AdminCheckService>();
 services.AddTransient<IUserService, UserService>();
-services.AddSingleton<ITokenService, TokenService>();
+services.AddSingleton<IAPITokenService, APITokenService>();
+services.AddSingleton<ITokenService,APITokenService>();
 services.AddSingleton<RegisterBot>();
 
 

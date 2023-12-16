@@ -1,8 +1,10 @@
 {
   "TelegramToken": "6291700272:AAHfskwunI-eJXbmosMqlGf-WW-Pg1k34os",
+  "ApiToken": "F57BCA88-B4E4-40C2-97F7-10FDBD5EB247",
   "admins": [
     1728238356,
     1050318011
   ],
   "ConnectionString": "Data Source=medb.db"
+
 }
