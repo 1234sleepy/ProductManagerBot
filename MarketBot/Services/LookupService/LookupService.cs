@@ -1,4 +1,5 @@
 ﻿using ProductManagerBot.Data.Entities;
+using System.IO;
 using System.Net;
 
 namespace ProductManagerBot.Services.LookupService
@@ -17,7 +18,13 @@ namespace ProductManagerBot.Services.LookupService
             {
                 if (File.Exists("cookie.txt"))
                 {
-
+                    string text = File.ReadAllText("cookie.txt");
+                    var all = text.Split('\n').ToArray();
+                    foreach(var i in all) {
+                        var words = i.Split('=').ToArray();
+                        cookieContainer.Add(new Cookie(words[0], words[1], "/", "images.barcodelookup.com"));
+                    }
+                    
                 }
                 else
                 {
