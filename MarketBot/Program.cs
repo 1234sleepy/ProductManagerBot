@@ -8,7 +8,9 @@ using ProductManagerBot.Services.FavoriteProductService;
 using ProductManagerBot.Services.ManufactureService;
 using ProductManagerBot.Services.ProductService;
 using ProductManagerBot.Services.TokenService;
+using ProductManagerBot.Services.APITokenService;
 using ProductManagerBot.Services.UserService;
+using ProductManagerBot.Services.SearchupcService;
 
 var services = new ServiceCollection();
 
@@ -22,7 +24,8 @@ services.AddTransient<IFavoriteProductService, FavoriteProductService>();
 services.AddTransient<IManufactureService, ManufactureService>();
 services.AddTransient<IAdminCheckService, AdminCheckService>();
 services.AddTransient<IUserService, UserService>();
-services.AddSingleton<ITokenService, TokenService>();
+services.AddSingleton<ISearchupcService, SearchupcService>();
+services.AddSingleton<ITokenService,TokenService>();
 services.AddSingleton<RegisterBot>();
 
 

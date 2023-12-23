@@ -22,5 +22,10 @@ namespace ProductManagerBot.Data.Entities
 
         public List<Product> Products { get; set; } = new();
         public List<FavoriteProduct> FavoriteProducts { get; set; } = new();
+
+        public override string ToString()
+        {
+            return $"Id : {Id} Name : {Name} Username : {Username} Phone : {Phone} Email : {Email}";
+        }
     }
 }

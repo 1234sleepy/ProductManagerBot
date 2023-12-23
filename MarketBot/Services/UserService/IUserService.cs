@@ -13,5 +13,7 @@ namespace ProductManagerBot.Services.UserService
         void Update(User user);
         Task<User?> GetById(int id);
         IQueryable<User> GetAll();
+
+
     }
 }

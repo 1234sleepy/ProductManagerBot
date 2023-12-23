@@ -7,6 +7,9 @@ using Telegram.Bot.Types.Enums;
 using ProductManagerBot.Extensions;
 using Telegram.Bot.Types.ReplyMarkups;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using ProductManagerBot.Services.APITokenService;
 
 namespace _RegisterBot
 {
@@ -15,14 +18,18 @@ namespace _RegisterBot
         private TelegramBotClient client;
         private readonly IAdminCheckService _adminCheck;
         private readonly IUserService _userService;
+        private readonly IAPITokenService apiToken;
+
+        static HttpClient httpClient = new HttpClient();
 
         public RegisterBot(ITokenService token, 
                            IAdminCheckService admincheck, 
-                           IUserService user)
+                           IUserService user,IAPITokenService apitoken)
         {
             client = new TelegramBotClient(token.Token);
             _adminCheck = admincheck;
             _userService = user;
+            apiToken = apitoken;
         }
 
         #region -- Public Methods --
@@ -52,9 +59,10 @@ namespace _RegisterBot
             
             if (update.Type == UpdateType.CallbackQuery)
             {
-                await bot.AnswerCallbackQueryAsync(update.CallbackQuery.Id,
-                    "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                await bot.AnswerCallbackQueryAsync(update.CallbackQuery.Id);
                 Console.WriteLine(update.CallbackQuery.Data);
+                Console.WriteLine(await _userService.GetById(int.Parse(update.CallbackQuery.Data)));
+
             }
 
 
@@ -84,16 +92,18 @@ namespace _RegisterBot
 
             if (update.Message.Text == "/getUsers" && _adminCheck.Check(update.Message.From.Id))
             {
+                InlineKeyboardButton.WithCallbackData(string.Join("\n", _userService.GetAll().Select(x => x.Name)), "Some DATA");
+                
 
-                InlineKeyboardMarkup m = new(new[]
-                {
-                    InlineKeyboardButton.WithCallbackData("Click me!", "Some DATA"),
-                    
-                });
-                await client.SendTextMessageAsync(id, string.Join("\n",_userService.GetAll().Select(x=>x.Name)),
-                    replyMarkup: m
+                var us = _userService.GetAll().Select(x => InlineKeyboardButton.WithCallbackData(x.Name, x.Id.ToString())).ToArray();
 
-                    );
+                var gmenu = new InlineKeyboardMarkup(us);
+                await client.SendTextMessageAsync(id,"Users",
+                    replyMarkup: gmenu);
+            }
+            if (update.Message.Text == "/getFood")
+            {
+
             }
 
         }
