@@ -20,4 +20,5 @@ public class Product : AddedDateEntity, IEntity
 
 
     public Manufacture? Manufacture { get; set; }
+    public Category? Category { get; set; }
 }
