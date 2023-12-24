@@ -18,18 +18,18 @@ namespace _RegisterBot
         private TelegramBotClient client;
         private readonly IAdminCheckService _adminCheck;
         private readonly IUserService _userService;
-        private readonly IAPITokenService apiToken;
+        //private readonly IAPITokenService apiToken;
 
         static HttpClient httpClient = new HttpClient();
 
         public RegisterBot(ITokenService token, 
                            IAdminCheckService admincheck, 
-                           IUserService user,IAPITokenService apitoken)
+                           IUserService user)
         {
             client = new TelegramBotClient(token.Token);
             _adminCheck = admincheck;
             _userService = user;
-            apiToken = apitoken;
+            //apiToken = apitoken;
         }
 
         #region -- Public Methods --

@@ -18,25 +18,24 @@ namespace ProductManagerBot.Services.LookupService
             {
                 if (File.Exists("cookie.txt"))
                 {
-                    string text = File.ReadAllText("cookie.txt");
-                    var all = text.Split('\n').ToArray();
-                    foreach(var i in all) {
-                        var words = i.Split('=').ToArray();
-                        cookieContainer.Add(new Cookie(words[0], words[1], "/", "images.barcodelookup.com"));
-                    }
-                    
+                    File.ReadAllText("cookie.txt")
+                        .Split('\n')
+                        .Select(x =>
+                        {
+                            var cookieData = x.Split("=");
+                            return new Cookie(cookieData[0], cookieData[1], "/", "barcodelookup.com");
+                        }).ToList().ForEach(coockie => cookieContainer.Add(coockie));
+
                 }
                 else
                 {
-                    cookieContainer.Add(new Cookie("__cflb", "0H28vbcrHzeMmZ5NNrCpT6p7tARu4XNiMmMSkjeETaM", "/", "images.barcodelookup.com"));
-                    cookieContainer.Add(new Cookie("_ga_6K9HJQ9YDK", "GS1.1.1703358513.2.1.1703358520.0.0.0", "/", ".barcodelookup.com"));
-                    cookieContainer.Add(new Cookie("cf_clearance", "SRSMFRaHm.7h1R59qXos87UChNXnB0qKVMICU2UqnFM-1703358514-0-2-7c3054b2.3e1d2dff.66da7a02-0.2.1703358514", "/", ".barcodelookup.com"));
+                    cookieContainer.Add(new Cookie("_ga_6K9HJQ9YDK", "GS1.1.1703444719.4.1.1703444724.0.0.0", "/", ".barcodelookup.com"));
+                    cookieContainer.Add(new Cookie("cf_clearance", "WGbxCfKU3EKy_3KnUdsqLe184_O8C5xG3P6lKQRl_bU-1703444721-0-2-7c3054b2.3e1d2dff.66da7a02-0.2.1703444721", "/", ".barcodelookup.com"));
                     cookieContainer.Add(new Cookie("bl_csrf", "1e2f6cb61e00c023b46115d4b514d19f", "/Session", ".barcodelookup.com"));
-                    cookieContainer.Add(new Cookie("__cflb", "04dToRCegghj9KSg7BqsUc4efEezbNiMRggcoD9m9F", "/", "www.barcodelookup.com"));
-                    cookieContainer.Add(new Cookie("bl_session", "70is7jq0psgfioc4loja9qrcngv9k3hh", "/", ".barcodelookup.com"));
+                    cookieContainer.Add(new Cookie("__cflb", "04dToRCegghj9KSg7BqsUc4efEezbNiXuGJqGGCxbP", "/", "www.barcodelookup.com"));
+                    cookieContainer.Add(new Cookie("bl_session", "6a80ob7qdaefmk95f67u9rbb12kimvff", "/", ".barcodelookup.com"));
                     cookieContainer.Add(new Cookie("_ga", "GA1.1.859256291.1702841831", "/", ".barcodelookup.com"));
-                    cookieContainer.Add(new Cookie("__cf_bm", "ozy.qmCbmbrdFHXq1kbSYuS9Tr9rF2TMf_PC6TYNBhU-1703358512-1-AedPE6BNsZtu0IPduZHUFg5ZxrQRX7K1scLqwK7SfYyNpIy5FHH+LmhsvC/cdbatVCxasLKD1yaauq9zx1LUIzuSfs804w7bECFTuv8Dv5Hv", "/", ".barcodelookup.com"));
-
+                    cookieContainer.Add(new Cookie("__cf_bm", "RJfeQpXfqvtTnVPSlChwxipjXJNX8.R8g.v.5.oOVEM-1703444719-1-AdNVe68550TYzrDXBpevak8N1LTwmKBNK49/jwFAwCdHLMoYWduMSuPBL5DmoiGlJXZN2Dz6peeVMfxUFfFZTg96kdkvP3OyzN6m3k3LBFBn", "/", ".barcodelookup.com"));
                 }
                 HttpRequestMessage request = new(HttpMethod.Get, $"https://www.barcodelookup.com/{barcode}");
                 request.Headers.Add("Accept-Language", "en-US,en;q=0.9,ru-RU;q=0.8,ru;q=0.7,uk;q=0.6");
@@ -57,7 +56,7 @@ namespace ProductManagerBot.Services.LookupService
 
                 var page = await response.Content.ReadAsStringAsync();
                 //var res = response.Headers.
-                //File.WriteAllText("page.html", page);
+                File.WriteAllText("page.html", page);
 
                 Uri uri = new Uri($"https://www.barcodelookup.com/{barcode}");
                 var responseCookie = cookieContainer.GetCookies(uri).Cast<Cookie>();
