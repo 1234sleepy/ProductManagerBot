@@ -68,11 +68,23 @@ namespace ProductManagerBot.Services.LookupService
                 int endIndex = page.IndexOf("</h4>", startIndex);
                 string name = page.Substring(startIndex+4, endIndex - startIndex-4).Trim();
 
-                int startmanuf = page.IndexOf("<h4>", indexOfEditButton);
-                int endmanuf = page.IndexOf("</h4>", startIndex);
-                string Manufacturer = page.Substring(startmanuf + 4, endmanuf - startmanuf - 4).Trim();
+                int manufOfEditButton = page.IndexOf("Manufacturer");
+                int startmanuf = page.IndexOf("Manufacturer:", manufOfEditButton);
+                int endmanuf = page.IndexOf("Manufacturer:", startIndex);
+                string Manufacturer = page.Substring(startmanuf + 28, endmanuf - startmanuf - 7).Trim();
 
-                return new Product { Name = name };
+                int kcalOfEditButton = page.IndexOf("Manufacturer");
+                int kcal = 0;
+                if (kcalOfEditButton > 0)
+                {
+
+                    int startkcal = page.IndexOf("Nutrition Facts:", kcalOfEditButton);
+                    int endkcalr = page.IndexOf("Nutrition Facts:", startIndex);
+                    kcal = int.Parse(page.Substring(startmanuf + 37, endmanuf - startmanuf - 121).Trim());
+                }
+
+
+                return new Product { Name = name, Manufacture = new Manufacture {Name = Manufacturer }, Calories = kcal };
             }
             catch
             {
