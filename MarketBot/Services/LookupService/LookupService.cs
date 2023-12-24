@@ -74,16 +74,18 @@ namespace ProductManagerBot.Services.LookupService
                 string barcoder = page.Substring(startIndex + 27, endIndex - startIndex - 7).Trim();
 
                 int indexOfCategory = page.IndexOf("Category:");
-                string categor = "";
+
+                Category category = null;
+                //string categor = "";
                 if (indexOfCategory > 0)
                 {
                     startIndex = page.IndexOf("<span>", indexOfEditButton);
                     endIndex = page.IndexOf("</span>", startIndex);
-                    categor = page.Substring(startIndex + 27, endIndex - startIndex - 7).Trim();
+                    category = new Category{ Name = page.Substring(startIndex + 27, endIndex - startIndex - 7).Trim() };
                 }
 
 
-                return new Product { Name = name, Barcode = barcoder, Category = new Category { Name = categor } };
+                return new Product { Name = name, Barcode = barcoder, Category = category };
             }
             catch
             {
