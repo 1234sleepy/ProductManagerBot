@@ -68,6 +68,22 @@ namespace ProductManagerBot.Services.LookupService
                 int endIndex = page.IndexOf("</h4>", startIndex);
                 string name = page.Substring(startIndex+4, endIndex - startIndex-4).Trim();
 
+
+                int manufOfEditButton = page.IndexOf("Manufacturer");
+                int startmanuf = page.IndexOf("Manufacturer:", manufOfEditButton);
+                int endmanuf = page.IndexOf("Manufacturer:", startIndex);
+                string Manufacturer = page.Substring(startmanuf + 28, endmanuf - startmanuf - 7).Trim();
+
+                int kcalOfEditButton = page.IndexOf("Manufacturer");
+                int kcal = 0;
+                if (kcalOfEditButton > 0)
+                {
+
+                    int startkcal = page.IndexOf("Nutrition Facts:", kcalOfEditButton);
+                    int endkcalr = page.IndexOf("Nutrition Facts:", startIndex);
+                    kcal = int.Parse(page.Substring(startmanuf + 37, endmanuf - startmanuf - 121).Trim());
+                }
+
                 int indexOfBar = page.IndexOf(" Barcode Formats:");
                 startIndex = page.IndexOf("<span>", indexOfEditButton);
                 endIndex = page.IndexOf("</span>", startIndex);
@@ -83,7 +99,8 @@ namespace ProductManagerBot.Services.LookupService
                 }
 
 
-                return new Product { Name = name, Barcode = barcoder, Category = new Category { Name = categor } };
+                return new Product { Name = name, Barcode = barcoder, Category = new Category { Name = categor },Manufacture = new Manufacture {Name = Manufacturer }, Calories = kcal};
+
             }
             catch
             {
