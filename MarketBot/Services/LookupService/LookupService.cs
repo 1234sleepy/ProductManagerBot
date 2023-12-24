@@ -68,7 +68,9 @@ namespace ProductManagerBot.Services.LookupService
                 int endIndex = page.IndexOf("</h4>", startIndex);
                 string name = page.Substring(startIndex+4, endIndex - startIndex-4).Trim();
 
-
+                int startmanuf = page.IndexOf("<h4>", indexOfEditButton);
+                int endmanuf = page.IndexOf("</h4>", startIndex);
+                string Manufacturer = page.Substring(startmanuf + 4, endmanuf - startmanuf - 4).Trim();
 
                 return new Product { Name = name };
             }
