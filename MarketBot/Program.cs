@@ -11,6 +11,7 @@ using ProductManagerBot.Services.TokenService;
 using ProductManagerBot.Services.APITokenService;
 using ProductManagerBot.Services.UserService;
 using ProductManagerBot.Services.SearchupcService;
+using ProductManagerBot.Services.LookupService;
 
 var services = new ServiceCollection();
 
@@ -26,6 +27,7 @@ services.AddTransient<IAdminCheckService, AdminCheckService>();
 services.AddTransient<IUserService, UserService>();
 services.AddSingleton<ISearchupcService, SearchupcService>();
 services.AddSingleton<ITokenService,TokenService>();
+services.AddSingleton<ILookupService,LookupService>();
 services.AddSingleton<RegisterBot>();
 
 

@@ -1,5 +1,7 @@
-﻿using ProductManagerBot.Extensions;
+﻿using ProductManagerBot.Data.Entities;
+using ProductManagerBot.Extensions;
 using ProductManagerBot.Services.AdminCheckService;
+using ProductManagerBot.Services.LookupService;
 using ProductManagerBot.Services.TokenService;
 using ProductManagerBot.Services.UserService;
 using System.Drawing;
@@ -16,6 +18,7 @@ namespace _RegisterBot
         private TelegramBotClient client;
         private readonly IAdminCheckService _adminCheck;
         private readonly IUserService _userService;
+        private readonly ILookupService _lookupService;
        
         public RegisterBot(ITokenService token,
                            IAdminCheckService admincheck,
@@ -50,6 +53,7 @@ namespace _RegisterBot
 
         private async Task UpdateHandler(ITelegramBotClient bot, Update update, CancellationToken ct)
         {
+            int id = (int)update!.Message!.From!.Id;
             var type = update.Message?.Type ?? MessageType.Unknown;
 
             if (update.Type == UpdateType.CallbackQuery)
@@ -78,7 +82,11 @@ namespace _RegisterBot
                     await bot.SendTextMessageAsync(
                         update.Message.From.Id,
                         text: $"{result.Text}!");
-                    //Todo: btn add
+
+                       var ress = await _lookupService.GetProduct(result.Text);
+                       var btn = InlineKeyboardButton.WithCallbackData("Favorite?", "Some DATA");
+                    var bmenu = new InlineKeyboardMarkup(btn);
+                        await client.SendTextMessageAsync(id, ress.Name,replyMarkup: bmenu);
                 }
                 else
                 {
