@@ -9,7 +9,7 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
-using ZXing;
+using ZXing.Windows.Compatibility;
 
 namespace _RegisterBot
 {
@@ -63,7 +63,7 @@ namespace _RegisterBot
                 Console.WriteLine(await _userService.GetById(int.Parse(update.CallbackQuery.Data)));
 
             }
-            if(type == MessageType.Photo)
+            if (type == MessageType.Photo)
             {
 
                 MemoryStream ms = new MemoryStream();
@@ -73,11 +73,10 @@ namespace _RegisterBot
                     photoInfo.FilePath,
                     ms);
 
-                var bmp = new Bitmap(ms);
-                BarcodeReader barcodeReader = new();
-                var luminance = new BitmapLuminanceSource(bmp);
-                var result = barcodeReader.Decode(luminance);
-                if(result != null)
+                var reader = new BarcodeReader();
+                var luminance = new BitmapLuminanceSource(new Bitmap(ms));
+                var result = reader.Decode(luminance);
+                if (result != null)
                 {
                     await bot.SendTextMessageAsync(
                         update.Message.From.Id,
