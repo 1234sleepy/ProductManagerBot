@@ -1,15 +1,13 @@
-﻿using ProductManagerBot.Services.AdminCheckService;
+﻿using ProductManagerBot.Extensions;
+using ProductManagerBot.Services.AdminCheckService;
 using ProductManagerBot.Services.TokenService;
 using ProductManagerBot.Services.UserService;
+using System.Drawing;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
-using ProductManagerBot.Extensions;
 using Telegram.Bot.Types.ReplyMarkups;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using ProductManagerBot.Services.APITokenService;
+using ZXing;
 
 namespace _RegisterBot
 {
@@ -18,12 +16,9 @@ namespace _RegisterBot
         private TelegramBotClient client;
         private readonly IAdminCheckService _adminCheck;
         private readonly IUserService _userService;
-        //private readonly IAPITokenService apiToken;
-
-        static HttpClient httpClient = new HttpClient();
-
-        public RegisterBot(ITokenService token, 
-                           IAdminCheckService admincheck, 
+       
+        public RegisterBot(ITokenService token,
+                           IAdminCheckService admincheck,
                            IUserService user)
         {
             client = new TelegramBotClient(token.Token);
@@ -56,7 +51,7 @@ namespace _RegisterBot
         private async Task UpdateHandler(ITelegramBotClient bot, Update update, CancellationToken ct)
         {
             var type = update.Message?.Type ?? MessageType.Unknown;
-            
+
             if (update.Type == UpdateType.CallbackQuery)
             {
                 await bot.AnswerCallbackQueryAsync(update.CallbackQuery.Id);
@@ -64,7 +59,34 @@ namespace _RegisterBot
                 Console.WriteLine(await _userService.GetById(int.Parse(update.CallbackQuery.Data)));
 
             }
+            if(type == MessageType.Photo)
+            {
 
+                MemoryStream ms = new MemoryStream();
+                var photoId = update?.Message?.Photo?.Last().FileId;
+                var photoInfo = await bot.GetFileAsync(photoId);
+                await bot.DownloadFileAsync(
+                    photoInfo.FilePath,
+                    ms);
+
+                var bmp = new Bitmap(ms);
+                BarcodeReader barcodeReader = new();
+                var luminance = new BitmapLuminanceSource(bmp);
+                var result = barcodeReader.Decode(luminance);
+                if(result != null)
+                {
+                    await bot.SendTextMessageAsync(
+                        update.Message.From.Id,
+                        text: $"{result.Text}!");
+                    //Todo: btn add
+                }
+                else
+                {
+                    await bot.SendTextMessageAsync(
+                        update.Message.From.Id,
+                        text: $"oh no((");
+                }
+            }
 
             if (type == MessageType.Text)
             {
@@ -93,12 +115,12 @@ namespace _RegisterBot
             if (update.Message.Text == "/getUsers" && _adminCheck.Check(update.Message.From.Id))
             {
                 InlineKeyboardButton.WithCallbackData(string.Join("\n", _userService.GetAll().Select(x => x.Name)), "Some DATA");
-                
+
 
                 var us = _userService.GetAll().Select(x => InlineKeyboardButton.WithCallbackData(x.Name, x.Id.ToString())).ToArray();
 
                 var gmenu = new InlineKeyboardMarkup(us);
-                await client.SendTextMessageAsync(id,"Users",
+                await client.SendTextMessageAsync(id, "Users",
                     replyMarkup: gmenu);
             }
             if (update.Message.Text == "/getFood")

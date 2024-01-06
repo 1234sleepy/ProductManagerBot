@@ -119,7 +119,7 @@ namespace ProductManagerBot.Services.LookupService
             {
 
             }
-            return null;
+            return new Product { Name = $"Product-{barcode}" };
         }
     }
 }
