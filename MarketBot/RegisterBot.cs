@@ -22,11 +22,13 @@ namespace _RegisterBot
        
         public RegisterBot(ITokenService token,
                            IAdminCheckService admincheck,
-                           IUserService user)
+                           IUserService user,
+                           ILookupService lookupService)
         {
             client = new TelegramBotClient(token.Token);
             _adminCheck = admincheck;
             _userService = user;
+            _lookupService = lookupService;
             //apiToken = apitoken;
         }
 
@@ -53,7 +55,6 @@ namespace _RegisterBot
 
         private async Task UpdateHandler(ITelegramBotClient bot, Update update, CancellationToken ct)
         {
-            int id = (int)update!.Message!.From!.Id;
             var type = update.Message?.Type ?? MessageType.Unknown;
 
             if (update.Type == UpdateType.CallbackQuery)
@@ -61,8 +62,9 @@ namespace _RegisterBot
                 await bot.AnswerCallbackQueryAsync(update.CallbackQuery.Id);
                 Console.WriteLine(update.CallbackQuery.Data);
                 Console.WriteLine(await _userService.GetById(int.Parse(update.CallbackQuery.Data)));
-
+                return;
             }
+            int id = (int)update!.Message!.From!.Id;
             if (type == MessageType.Photo)
             {
 
