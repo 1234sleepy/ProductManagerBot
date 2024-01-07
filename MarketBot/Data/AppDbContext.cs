@@ -5,6 +5,10 @@ namespace ProductManagerBot.Data
 {
     internal class AppDbContext : DbContext
     {
+        public AppDbContext()
+        {
+            
+        }
         public AppDbContext(DbContextOptions options) : base(options)
         {
         }
@@ -14,5 +18,10 @@ namespace ProductManagerBot.Data
         public DbSet<FavoriteProduct> FavoriteProducts => Set<FavoriteProduct>();
         public DbSet<Manufacture> Manufactures => Set<Manufacture>();
         public DbSet<Product> Products => Set<Product>();
+        protected override void OnConfiguring(DbContextOptionsBuilder opt)
+        {
+            base.OnConfiguring(opt);
+            opt.UseSqlite("Data Source=../../../medb.db");
+        }
     }
 }

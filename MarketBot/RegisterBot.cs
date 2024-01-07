@@ -11,6 +11,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using ProductManagerBot.Services.APITokenService;
 using ProductManagerBot.Services.FavoriteProductService;
+using ProductManagerBot.Services.ProductService;
 
 namespace _RegisterBot
 {
@@ -19,7 +20,7 @@ namespace _RegisterBot
         private TelegramBotClient client;
         private readonly IAdminCheckService _adminCheck;
         private readonly IUserService _userService;
-        private readonly IFavoriteProductService _favoriteproduct;
+        private readonly IProductService _product;
         //private readonly IAPITokenService apiToken;
 
         static HttpClient httpClient = new HttpClient();
@@ -27,12 +28,12 @@ namespace _RegisterBot
         public RegisterBot(ITokenService token, 
                            IAdminCheckService admincheck, 
                            IUserService user,
-                           IFavoriteProductService product)
+                           IProductService product)
         {
             client = new TelegramBotClient(token.Token);
             _adminCheck = admincheck;
             _userService = user;
-            _favoriteproduct = product;
+            _product = product;
             //apiToken = apitoken;
         }
 
@@ -107,7 +108,7 @@ namespace _RegisterBot
             }
             if (update.Message.Text == "/getFood")
             {
-                var prod = _favoriteproduct.GetAll().Select(x => InlineKeyboardButton.WithCallbackData(x.Id.ToString(), x.Id.ToString())).ToArray();
+                var prod = _product.GetAll().Select(x => InlineKeyboardButton.WithCallbackData(x.Name.ToString(), x.Id.ToString())).ToArray();
 
                 var gmenu = new InlineKeyboardMarkup(prod);
                 await client.SendTextMessageAsync(id, "Product",

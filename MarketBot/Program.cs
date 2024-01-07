@@ -11,12 +11,13 @@ using ProductManagerBot.Services.TokenService;
 using ProductManagerBot.Services.APITokenService;
 using ProductManagerBot.Services.UserService;
 using ProductManagerBot.Services.SearchupcService;
+using ProductManagerBot.Helpers;
 
 var services = new ServiceCollection();
 
 services.AddDbContext<AppDbContext>(opt =>
 {
-    opt.UseSqlite("Data Source=../../../medb.db");
+    //opt.UseSqlite("Data Source=../../../medb.db");
 });
 services.AddTransient<IProductService, ProductService>();
 services.AddTransient<ICategoryService, CategoryService>();
@@ -30,6 +31,10 @@ services.AddSingleton<RegisterBot>();
 
 
 using var provider = services.BuildServiceProvider(); //provider.GetService<ITokenService>();
+
+var context = provider.GetService<AppDbContext>();
+context.Database.Migrate();
+Seed.SeedData(context);
 
 var bot = provider.GetService<RegisterBot>();
 
