@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using ProductManagerBot.Services.APITokenService;
+using ProductManagerBot.Services.FavoriteProductService;
 
 namespace _RegisterBot
 {
@@ -18,17 +19,20 @@ namespace _RegisterBot
         private TelegramBotClient client;
         private readonly IAdminCheckService _adminCheck;
         private readonly IUserService _userService;
+        private readonly IFavoriteProductService _favoriteproduct;
         //private readonly IAPITokenService apiToken;
 
         static HttpClient httpClient = new HttpClient();
 
         public RegisterBot(ITokenService token, 
                            IAdminCheckService admincheck, 
-                           IUserService user)
+                           IUserService user,
+                           IFavoriteProductService product)
         {
             client = new TelegramBotClient(token.Token);
             _adminCheck = admincheck;
             _userService = user;
+            _favoriteproduct = product;
             //apiToken = apitoken;
         }
 
@@ -103,6 +107,11 @@ namespace _RegisterBot
             }
             if (update.Message.Text == "/getFood")
             {
+                var prod = _favoriteproduct.GetAll().Select(x => InlineKeyboardButton.WithCallbackData(x.Id.ToString(), x.Id.ToString())).ToArray();
+
+                var gmenu = new InlineKeyboardMarkup(prod);
+                await client.SendTextMessageAsync(id, "Product",
+                    replyMarkup: gmenu);
 
             }
 
