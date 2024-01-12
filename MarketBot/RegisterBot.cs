@@ -1,7 +1,10 @@
-﻿using ProductManagerBot.Data.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using ProductManagerBot.Data.Entities;
 using ProductManagerBot.Extensions;
 using ProductManagerBot.Services.AdminCheckService;
+using ProductManagerBot.Services.FavoriteProductService;
 using ProductManagerBot.Services.LookupService;
+using ProductManagerBot.Services.ProductService;
 using ProductManagerBot.Services.TokenService;
 using ProductManagerBot.Services.UserService;
 using System.Drawing;
@@ -19,15 +22,23 @@ namespace _RegisterBot
         private readonly IAdminCheckService _adminCheck;
         private readonly IUserService _userService;
         private readonly ILookupService _lookupService;
+        private readonly IFavoriteProductService _favoriteProductService;
+        private readonly IProductService _productService;
+        static Dictionary<String, Object> buffer = new Dictionary<String, Object>();
        
         public RegisterBot(ITokenService token,
                            IAdminCheckService admincheck,
-                           IUserService user)
+                           IUserService user,
+                           ILookupService lookupService,
+                           IFavoriteProductService favoriteProductService,
+                           IProductService productService)
         {
             client = new TelegramBotClient(token.Token);
             _adminCheck = admincheck;
             _userService = user;
-            //apiToken = apitoken;
+            _lookupService = lookupService;
+            _favoriteProductService = favoriteProductService;
+            _productService = productService;
         }
 
         #region -- Public Methods --
@@ -61,8 +72,19 @@ namespace _RegisterBot
                 await bot.AnswerCallbackQueryAsync(update.CallbackQuery.Id);
                 Console.WriteLine(update.CallbackQuery.Data);
                 Console.WriteLine(await _userService.GetById(int.Parse(update.CallbackQuery.Data)));
+                /*if (update.CallbackQuery.Data == "addFavProduct") {
+                    if((await _favoriteProductService.GetAllByUserId(id)).AnyAsync(int.Parse(update.CallbackData.Id))
+                    _favoriteProductService.Add(id, int.Parse(up));   
+                */}
+                if (update.CallbackQuery.Data.Contains("addProduct"))
+                {
+                var f = update.CallbackQuery.Data.Split(" ")[1];
+                if (await (await _productService.GetAllByUserId(id)).AnyAsync(x => x.Name.Equals(f))) {
+                    _productService.Add((Product)buffer[update.CallbackQuery.Data.Split(" ")[1]], id);
+                }
+                    
+                }
 
-            }
             if (type == MessageType.Photo)
             {
 
@@ -78,13 +100,18 @@ namespace _RegisterBot
                 var result = reader.Decode(luminance);
                 if (result != null)
                 {
+                    
+
                     await bot.SendTextMessageAsync(
                         update.Message.From.Id,
                         text: $"{result.Text}!");
 
                        var ress = await _lookupService.GetProduct(result.Text);
-                       var btn = InlineKeyboardButton.WithCallbackData("Favorite?", "Some DATA");
-                    var bmenu = new InlineKeyboardMarkup(btn);
+                       buffer[result.Text] = ress;
+                       var btn = InlineKeyboardButton.WithCallbackData("Favorite?", "addFavProduct");
+                       var btn2 = InlineKeyboardButton.WithCallbackData("Product?", "addProduct " + result.Text);
+                        var btna = new[] { btn,btn2};
+                        var bmenu = new InlineKeyboardMarkup(btna);
                         await client.SendTextMessageAsync(id, ress.Name,replyMarkup: bmenu);
                 }
                 else

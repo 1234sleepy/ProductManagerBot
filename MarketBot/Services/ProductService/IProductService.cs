@@ -11,7 +11,7 @@ namespace ProductManagerBot.Services.ProductService
     {
 
        
-        void Add(Product p);
+        void Add(Product p, long telegramId);
 
         void Update(Product p);
         void Delete(int id);
