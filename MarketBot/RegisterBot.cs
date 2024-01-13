@@ -72,8 +72,9 @@ namespace _RegisterBot
                 await bot.AnswerCallbackQueryAsync(update.CallbackQuery.Id);
                 Console.WriteLine(update.CallbackQuery.Data);
                 Console.WriteLine(await _userService.GetById(int.Parse(update.CallbackQuery.Data)));
+                var f = update.CallbackQuery.Data.Split(" ")[1];
                 if (update.CallbackQuery.Data == "addFavProduct") {
-                    var f = update.CallbackQuery.Data.Split(" ")[1];
+                    
                     if (await (await _favoriteProductService.GetAllByUserId(id)).AnyAsync(x => x.Id.Equals(f)))
                     {
                         _favoriteProductService.Add( id, (int)buffer[update.CallbackQuery.Data.Split(" ")[1]]);
@@ -81,7 +82,6 @@ namespace _RegisterBot
 
                     if (update.CallbackQuery.Data.Contains("addProduct"))
                 {
-                    var f = update.CallbackQuery.Data.Split(" ")[1];
                     if (await (await _productService.GetAllByUserId(id)).AnyAsync(x => x.Name.Equals(f)))
                     {
                         _productService.Add((Product)buffer[update.CallbackQuery.Data.Split(" ")[1]], id);
