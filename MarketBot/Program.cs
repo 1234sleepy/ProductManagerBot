@@ -12,7 +12,7 @@ using ProductManagerBot.Services.APITokenService;
 using ProductManagerBot.Services.UserService;
 using ProductManagerBot.Services.SearchupcService;
 using ProductManagerBot.Services.LookupService;
-using ProductManagerBot.Services.UPS;
+using ProductManagerBot.Services.UPCitemService;
 
 var services = new ServiceCollection();
 
@@ -28,7 +28,7 @@ services.AddTransient<IAdminCheckService, AdminCheckService>();
 services.AddTransient<IUserService, UserService>();
 services.AddSingleton<ISearchupcService, SearchupcService>();
 services.AddSingleton<ITokenService,TokenService>();
-services.AddSingleton<ITokenService,TokenService>();
+services.AddSingleton<IUPCitemService, UPCitemService>();
 services.AddSingleton<ILookupService,LookupService>();
 services.AddSingleton<RegisterBot>();
 

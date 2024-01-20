@@ -6,6 +6,7 @@ using ProductManagerBot.Services.FavoriteProductService;
 using ProductManagerBot.Services.LookupService;
 using ProductManagerBot.Services.ProductService;
 using ProductManagerBot.Services.TokenService;
+using ProductManagerBot.Services.UPCitemService;
 using ProductManagerBot.Services.UserService;
 using System.Drawing;
 using Telegram.Bot;
@@ -24,6 +25,7 @@ namespace _RegisterBot
         private readonly ILookupService _lookupService;
         private readonly IFavoriteProductService _favoriteProductService;
         private readonly IProductService _productService;
+        private readonly IUPCitemService _upcService;
         static Dictionary<String, Object> buffer = new Dictionary<String, Object>();
        
         public RegisterBot(ITokenService token,
@@ -31,7 +33,8 @@ namespace _RegisterBot
                            IUserService user,
                            ILookupService lookupService,
                            IFavoriteProductService favoriteProductService,
-                           IProductService productService)
+                           IProductService productService,
+                           IUPCitemService upcService)
         {
             client = new TelegramBotClient(token.Token);
             _adminCheck = admincheck;
@@ -39,6 +42,7 @@ namespace _RegisterBot
             _lookupService = lookupService;
             _favoriteProductService = favoriteProductService;
             _productService = productService;
+            _upcService = upcService;
         }
 
         #region -- Public Methods --
@@ -113,7 +117,7 @@ namespace _RegisterBot
                             update.Message.From.Id,
                             text: $"{result.Text}!");
 
-                        var ress = await _lookupService.GetProduct(result.Text);
+                        var ress = await _upcService.GetProduct(result.Text);
                         buffer[result.Text] = ress;
                         var btn = InlineKeyboardButton.WithCallbackData("Favorite?", "addFavProduct" + result.Text);
                         var btn2 = InlineKeyboardButton.WithCallbackData("Product?", "addProduct " + result.Text);

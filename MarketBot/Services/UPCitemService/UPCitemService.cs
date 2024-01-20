@@ -19,7 +19,7 @@ namespace ProductManagerBot.Services.UPCitemService
             request.AddQueryParameter("upc", barcode);
             IRestResponse response = client.Execute(request);
             Console.WriteLine("response: " + response.Content);
-            // parsing json
+
             var obj = JsonConvert.DeserializeObject(response.Content);
             Console.WriteLine("offset: " + obj);
 
