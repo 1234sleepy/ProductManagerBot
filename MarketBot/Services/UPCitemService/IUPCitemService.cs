@@ -9,6 +9,6 @@ namespace ProductManagerBot.Services.UPCitemService
 {
     internal interface IUPCitemService
     {
-        Task<Product> GetProduct(string barcode);
+        Task<Product?> GetProduct(string barcode);
     }
 }
