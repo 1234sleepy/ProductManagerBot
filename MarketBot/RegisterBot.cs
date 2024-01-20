@@ -71,66 +71,68 @@ namespace _RegisterBot
             {
                 await bot.AnswerCallbackQueryAsync(update.CallbackQuery.Id);
                 Console.WriteLine(update.CallbackQuery.Data);
-                Console.WriteLine(await _userService.GetById(int.Parse(update.CallbackQuery.Data)));
+                //Console.WriteLine(await _userService.GetById(int.Parse(update.CallbackQuery.Data)));
                 var f = update.CallbackQuery.Data.Split(" ")[1];
-                if (update.CallbackQuery.Data == "addFavProduct") {
-                    
+                if (update.CallbackQuery.Data == "addFavProduct")
+                {
+
                     if (await (await _favoriteProductService.GetAllByUserId(id)).AnyAsync(x => x.Id.Equals(f)))
                     {
-                        _favoriteProductService.Add( id, (int)buffer[update.CallbackQuery.Data.Split(" ")[1]]);
+                        _favoriteProductService.Add(id, (int)buffer[update.CallbackQuery.Data.Split(" ")[1]]);
                     }
 
                     if (update.CallbackQuery.Data.Contains("addProduct"))
-                {
-                    if (await (await _productService.GetAllByUserId(id)).AnyAsync(x => x.Name.Equals(f)))
                     {
-                        _productService.Add((Product)buffer[update.CallbackQuery.Data.Split(" ")[1]], id);
+                        if (await (await _productService.GetAllByUserId(id)).AnyAsync(x => x.Barcode.Equals(f)))
+                        {
+                            _productService.Add((Product)buffer[update.CallbackQuery.Data.Split(" ")[1]], id);
+                        }
+
                     }
-
                 }
-            }
 
-        
-            if (type == MessageType.Photo)
-            {
 
-                MemoryStream ms = new MemoryStream();
-                var photoId = update?.Message?.Photo?.Last().FileId;
-                var photoInfo = await bot.GetFileAsync(photoId);
-                await bot.DownloadFileAsync(
-                    photoInfo.FilePath,
-                    ms);
-
-                var reader = new BarcodeReader();
-                var luminance = new BitmapLuminanceSource(new Bitmap(ms));
-                var result = reader.Decode(luminance);
-                if (result != null)
+                if (type == MessageType.Photo)
                 {
-                    
 
-                    await bot.SendTextMessageAsync(
-                        update.Message.From.Id,
-                        text: $"{result.Text}!");
+                    MemoryStream ms = new MemoryStream();
+                    var photoId = update?.Message?.Photo?.Last().FileId;
+                    var photoInfo = await bot.GetFileAsync(photoId);
+                    await bot.DownloadFileAsync(
+                        photoInfo.FilePath,
+                        ms);
 
-                       var ress = await _lookupService.GetProduct(result.Text);
-                       buffer[result.Text] = ress;
-                       var btn = InlineKeyboardButton.WithCallbackData("Favorite?", "addFavProduct");
-                       var btn2 = InlineKeyboardButton.WithCallbackData("Product?", "addProduct " + result.Text);
-                        var btna = new[] { btn,btn2};
+                    var reader = new BarcodeReader();
+                    var luminance = new BitmapLuminanceSource(new Bitmap(ms));
+                    var result = reader.Decode(luminance);
+                    if (result != null)
+                    {
+
+
+                        await bot.SendTextMessageAsync(
+                            update.Message.From.Id,
+                            text: $"{result.Text}!");
+
+                        var ress = await _lookupService.GetProduct(result.Text);
+                        buffer[result.Text] = ress;
+                        var btn = InlineKeyboardButton.WithCallbackData("Favorite?", "addFavProduct" + result.Text);
+                        var btn2 = InlineKeyboardButton.WithCallbackData("Product?", "addProduct " + result.Text);
+                        var btna = new[] { btn, btn2 };
                         var bmenu = new InlineKeyboardMarkup(btna);
-                        await client.SendTextMessageAsync(id, ress.Name,replyMarkup: bmenu);
+                        await client.SendTextMessageAsync(id, ress.Name, replyMarkup: bmenu);
+                    }
+                    else
+                    {
+                        await bot.SendTextMessageAsync(
+                            update.Message.From.Id,
+                            text: $"oh no((");
+                    }
                 }
-                else
-                {
-                    await bot.SendTextMessageAsync(
-                        update.Message.From.Id,
-                        text: $"oh no((");
-                }
-            }
 
-            if (type == MessageType.Text)
-            {
-                await TextMessageHandler(update);
+                if (type == MessageType.Text)
+                {
+                    await TextMessageHandler(update);
+                }
             }
         }
 
