@@ -12,7 +12,7 @@ namespace ProductManagerBot.Services.LookupService.Tests
     public class LookupServiceTests
     {
         [TestMethod()]
-        public void GetProductTest()
+        public void GetProductNameTest()
         {
             var expected = "Milka Toffee Ganznuss";
 
@@ -21,6 +21,48 @@ namespace ProductManagerBot.Services.LookupService.Tests
             var actual = service.GetProduct("7622300134532")
                                 .Result?
                                 .Name ?? string.Empty;
+
+
+            Assert.AreEqual(expected, actual, $"Fail!: Expected is <{expected}>, but actual is <{actual}>s!");
+        }
+        [TestMethod()]
+        public void GetProductManufactureTest()
+        {
+            var expected = "Milka";
+
+            LookupService service = new();
+
+            var actual = service.GetProduct("7622300134532")
+                                .Result?
+                                .Manufacture?.Name ?? string.Empty;
+
+
+            Assert.AreEqual(expected, actual, $"Fail!: Expected is <{expected}>, but actual is <{actual}>s!");
+        }
+        [TestMethod()]
+        public void GetProductCategoryTest()
+        {
+            var expected = "Food, Beverages & Tobacco";
+
+            LookupService service = new();
+
+            var actual = service.GetProduct("7622300134532")
+                                .Result?
+                                .Manufacture?.Name ?? string.Empty;
+
+
+            Assert.AreEqual(expected, actual, $"Fail!: Expected is <{expected}>, but actual is <{actual}>s!");
+        }
+        [TestMethod()]
+        public void GetProductEnergyTest()
+        {
+            var expected = 560;
+
+            LookupService service = new();
+
+            var actual = service.GetProduct("7622300134532")
+                                .Result?
+                                .Calories ?? 0;
 
 
             Assert.AreEqual(expected, actual, $"Fail!: Expected is <{expected}>, but actual is <{actual}>s!");

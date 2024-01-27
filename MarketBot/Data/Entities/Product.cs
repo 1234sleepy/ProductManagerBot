@@ -15,9 +15,10 @@ public class Product : AddedDateEntity, IEntity
     [Required]
     [MaxLength(25)]
     public string? Name { get; set; }
-    public int UserId { get; set; }
+    public long UserId { get; set; }
     public int CategoryId { get; set; }
 
 
     public Manufacture? Manufacture { get; set; }
+    public Category? Category { get; set; }
 }

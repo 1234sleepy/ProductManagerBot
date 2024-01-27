@@ -12,8 +12,9 @@ namespace ProductManagerBot.Services.ProductService
             _appDbContext = appDbContext;
         }
         
-        public async void Add(Product p)
+        public async void Add(Product p,long telegramId)
         {
+            p.UserId = telegramId;
             await _appDbContext.Products.AddAsync(p);
             await _appDbContext.SaveChangesAsync();
         }
